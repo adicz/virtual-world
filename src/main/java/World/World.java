@@ -4,25 +4,31 @@ import World.Organisms.OrganismFactory;
 import World.Organisms.OrganismType;
 import World.Organisms.Organisms;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class World {
 
     private Integer dimensionN;
     private Integer dimensionM;
-    private Organisms[][] world;
+    private Organisms[][] fields;
 
     public World(Integer dimensionN, Integer dimensionM) {
         this.dimensionN = dimensionN;
         this.dimensionM = dimensionM;
-        this.world = new Organisms[dimensionN][dimensionM];
+        this.fields = new Organisms[dimensionN][dimensionM];
+    }
+
+    public Organisms[][] getFields() {
+        return fields;
     }
 
     public void start() {
         createWorld();
         printWorld();
+        while(true){
+            takeATurn();
+            printWorld();
+        }
     }
 
     private void createWorld() {
@@ -44,8 +50,8 @@ public class World {
                     randomPositionX = random.nextInt(dimensionN - 1);
                     randomPositionY = random.nextInt(dimensionM - 1);
 
-                    if (world[randomPositionX][randomPositionY].getOrganismType() == OrganismType.GRASS) {
-                        world[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), randomPositionX, randomPositionY, this);
+                    if (fields[randomPositionX][randomPositionY].getOrganismType() == OrganismType.GRASS) {
+                        fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), randomPositionX, randomPositionY, this);
                         flag = false;
                     }
                 } while (flag);
@@ -54,9 +60,9 @@ public class World {
     }
 
     private void placeGrassEverywhere() {
-        for (int i = 0; i < world.length; i++) {
-            for (int j = 0; j < world[i].length; j++) {
-                world[i][j] = OrganismFactory.create(OrganismType.GRASS, i, j, this);
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                fields[i][j] = OrganismFactory.create(OrganismType.GRASS, i, j, this);
             }
         }
     }
@@ -65,28 +71,46 @@ public class World {
         List<NumberOfOrganisms> numberOfOrganisms = new ArrayList<>();
 
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.HUMAN, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 4));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 4));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.FOX, 2));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 3));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 2));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 12));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 8));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 2));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.FOX, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 10));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 1));
 
         return numberOfOrganisms;
     }
 
     private void takeATurn() {
+        List<Organisms> turnPriority = new ArrayList<>();
 
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                if (fields[i][j] != null){
+                    turnPriority.add(fields[i][j]);
+                }
+            }
+        }
+
+        Collections.sort(turnPriority);
+
+        turnPriority.forEach(Organisms::action);
     }
 
-    private void printWorld() {
+    public void printWorld() {
         String spacer = "\t";
-        for (int i = 0; i < world.length; i++) {
-            for (int j = 0; j < world[i].length; j++) {
-                world[i][j].print();
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+
+                if (fields[i][j] != null) {
+                    fields[i][j].print();
+                } else {
+                    System.out.print(" ");
+                }
                 System.out.print(spacer);
+
             }
             System.out.println();
         }

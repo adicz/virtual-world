@@ -2,15 +2,18 @@ package World.Organisms;
 
 import World.World;
 
-public abstract class Organisms {
+import java.util.Comparator;
+
+public abstract class Organisms implements Comparable<Organisms> {
 
     private Integer strength;
     private Integer initiative;
-    private Integer positionX;
-    private Integer positionY;
-    private World world;
+    protected Integer positionX;
+    protected Integer positionY;
+    protected World world;
     private String symbol;
     private OrganismType organismType;
+    private Integer lifeTime;
 
     public Organisms(Integer strength, Integer initiative, Integer positionX, Integer positionY, World world, String symbol, OrganismType organismType) {
         this.strength = strength;
@@ -20,15 +23,12 @@ public abstract class Organisms {
         this.world = world;
         this.symbol = symbol;
         this.organismType = organismType;
+        this.lifeTime = 1;
     }
 
-    public void action(){
+    public void action(){}
 
-    }
-
-    public void collision(){
-
-    }
+    public void collision(){}
 
     public void print(){
         System.out.print(symbol);
@@ -40,5 +40,22 @@ public abstract class Organisms {
 
     public OrganismType getOrganismType() {
         return organismType;
+    }
+
+    public Integer getStrength() {
+        return strength;
+    }
+
+    public Integer getInitiative() {
+        return initiative;
+    }
+
+    @Override
+    public int compareTo(Organisms o) {
+        if (this.initiative == o.initiative){
+            return -this.lifeTime + o.lifeTime;
+        } else {
+            return -this.initiative + o.initiative;
+        }
     }
 }
