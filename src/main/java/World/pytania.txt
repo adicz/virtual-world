@@ -1,0 +1,4 @@
+1. Czy wzorzec projektowy factory jest dobrze zaimplementowany?
+    Wzorowałem się opracowaniem z SDA w którym opisane było stworzenie interfejsu xyzFactory a następnie zaciągnięcie go do poszczególnych klass.
+    Innym rozwiązaniem jakie spotkałem to stworzenie po prsotu OrganismFactory, i w metodzie .create(OrganismType.HUMAN)
+    podanie enuma który podaje typ obiektu jaki chcemy stworzyć (poprzez switcha).
