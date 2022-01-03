@@ -4,8 +4,8 @@ import World.World;
 
 public class Plant extends Organisms {
 
-    public Plant(Integer strength, Integer initiative, Integer positionX, Integer positionY, World world, String symbol, OrganismType organismType) {
-        super(strength, initiative, positionX, positionY, world, symbol, organismType);
+    public Plant(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
+        super(strength, initiative, position, world, symbol, organismType);
     }
 
 }

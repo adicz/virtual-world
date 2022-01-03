@@ -8,18 +8,16 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     private Integer strength;
     private Integer initiative;
-    protected Integer positionX;
-    protected Integer positionY;
+    protected Position position;
     protected World world;
     private String symbol;
     private OrganismType organismType;
     private Integer lifeTime;
 
-    public Organisms(Integer strength, Integer initiative, Integer positionX, Integer positionY, World world, String symbol, OrganismType organismType) {
+    public Organisms(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         this.strength = strength;
         this.initiative = initiative;
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position = position;
         this.world = world;
         this.symbol = symbol;
         this.organismType = organismType;
@@ -48,6 +46,18 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     public Integer getInitiative() {
         return initiative;
+    }
+
+    public Integer getLifeTime() {
+        return lifeTime;
+    }
+
+    public void lifeTimeIncrement(){
+        this.lifeTime++;
+    }
+
+    public void gainStrength(int value){
+        strength += value;
     }
 
     @Override
