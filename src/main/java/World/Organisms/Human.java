@@ -29,7 +29,9 @@ public class Human extends Animal {
                 moveDown();
                 break;
             case "e":
-                // todo
+                // todo obsługa umiejętności
+            case "q":
+                // todo obsługo statystyk świata
         }
 
     }
@@ -38,7 +40,6 @@ public class Human extends Animal {
         Scanner scanner = new Scanner(System.in);
         String nextMove;
         System.out.println();
-
         do {
             System.out.print("Enter where you want to move (w:↑ a:← d:→ s:↓): ");
             nextMove = scanner.nextLine();
@@ -50,10 +51,10 @@ public class Human extends Animal {
     }
 
     private boolean isCorrectMove(String nextMove) {
-        return !Objects.equals(nextMove, "w") &&
-                !Objects.equals(nextMove, "a") &&
-                !Objects.equals(nextMove, "s") &&
-                !Objects.equals(nextMove, "d");
+        return !"w".equals(nextMove) &&
+                !"a".equals(nextMove) &&
+                !"s".equals(nextMove) &&
+                !"d".equals(nextMove);
     }
 
     public void moveUp() {
@@ -94,7 +95,7 @@ public class Human extends Animal {
             world.getFields()[position.X][position.Y] = null;
             position.Y += 1;
             world.getFields()[position.X][position.Y] = this;
-            world.getWorldLogs().addLog("You moved down");
+            world.getWorldLogs().addLog("You moved right");
         } else {
             System.out.print("You can't move there, it's the end of the world\n\n");
         }

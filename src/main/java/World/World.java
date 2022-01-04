@@ -5,10 +5,7 @@ import World.Organisms.OrganismType;
 import World.Organisms.Organisms;
 import World.Organisms.Position;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class World {
 
@@ -16,11 +13,16 @@ public class World {
     private Integer dimensionM;
     private Organisms[][] fields;
     private Log worldLogs = new Log();
+    private List<Organisms> turnPriority = new ArrayList<>();
 
     public World(Integer dimensionN, Integer dimensionM) {
         this.dimensionN = dimensionN;
         this.dimensionM = dimensionM;
         this.fields = new Organisms[dimensionN][dimensionM];
+    }
+
+    public List<Organisms> getTurnPriority() {
+        return turnPriority;
     }
 
     public Organisms getOrganismOnField(Position position) {
@@ -33,6 +35,10 @@ public class World {
 
     public Organisms[][] getFields() {
         return fields;
+    }
+
+    public void addLog(String log){
+        worldLogs.addLog(log);
     }
 
     public Log getWorldLogs() {
@@ -49,7 +55,7 @@ public class World {
     }
 
     private void createWorld() {
-        placeGrassEverywhere();
+        //placeGrassEverywhere();
         placeOrganisms();
     }
 
@@ -64,13 +70,19 @@ public class World {
             for (int i = 0; i < organism.getNumberOfOrganism(); i++) {
                 do {
                     flag = true;
-                    randomPositionX = random.nextInt(dimensionN - 1);
-                    randomPositionY = random.nextInt(dimensionM - 1);
+                    randomPositionX = random.nextInt(dimensionN);
+                    randomPositionY = random.nextInt(dimensionM);
 
-                    if (fields[randomPositionX][randomPositionY].getOrganismType() == OrganismType.GRASS) {
+                    if (fields[randomPositionX][randomPositionY] == null){
                         fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), new Position(randomPositionX, randomPositionY), this);
                         flag = false;
+                    } else {
+                        if (fields[randomPositionX][randomPositionY].getOrganismType() == null) {
+                            fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), new Position(randomPositionX, randomPositionY), this);
+                            flag = false;
+                        }
                     }
+
                 } while (flag);
             }
         }
@@ -88,11 +100,12 @@ public class World {
         List<NumberOfOrganisms> numberOfOrganisms = new ArrayList<>();
 
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.HUMAN, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 0));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 3));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 5));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.FOX, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 0));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 0));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GRASS, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 0));
@@ -101,7 +114,7 @@ public class World {
     }
 
     private void takeATurn() {
-        List<Organisms> turnPriority = new ArrayList<>();
+        turnPriority.clear();
 
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields[i].length; j++) {
@@ -112,7 +125,12 @@ public class World {
         }
 
         Collections.sort(turnPriority);
-        turnPriority.forEach(Organisms::action);
+        try {
+            turnPriority.forEach(Organisms::action);
+        } catch (ConcurrentModificationException e){
+            System.out.println("Usunięto element z listy która właśnie była wykonywana");
+        }
+
         turnPriority.forEach(Organisms::lifeTimeIncrement);
     }
 

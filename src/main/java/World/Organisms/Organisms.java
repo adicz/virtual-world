@@ -6,13 +6,13 @@ import java.util.Comparator;
 
 public abstract class Organisms implements Comparable<Organisms> {
 
-    private Integer strength;
-    private Integer initiative;
+    protected Integer strength;
+    protected Integer initiative;
     protected Position position;
     protected World world;
     private String symbol;
     private OrganismType organismType;
-    private Integer lifeTime;
+    protected Integer lifeTime;
 
     public Organisms(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         this.strength = strength;
@@ -26,7 +26,7 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     public void action(){}
 
-    public void collision(){}
+    public void collision(Position position){}
 
     public void print(){
         System.out.print(symbol);
@@ -38,10 +38,6 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     public OrganismType getOrganismType() {
         return organismType;
-    }
-
-    public Integer getStrength() {
-        return strength;
     }
 
     public Integer getInitiative() {

@@ -28,4 +28,9 @@ public class Position {
     public void setPositionY(int positionY) {
         this.Y = positionY;
     }
+
+    @Override
+    public String toString() {
+        return "{" + X + "," + Y + "}";
+    }
 }

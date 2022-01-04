@@ -8,4 +8,13 @@ public class Plant extends Organisms {
         super(strength, initiative, position, world, symbol, organismType);
     }
 
+    @Override
+    public void action() {
+
+    }
+
+    @Override
+    public void collision(Position position) {
+
+    }
 }

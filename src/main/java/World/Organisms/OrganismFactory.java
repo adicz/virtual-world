@@ -7,7 +7,7 @@ public class OrganismFactory {
     public static Organisms create(OrganismType organismType, Position position, World world){
         switch(organismType){
             case HUMAN:
-                return new Human(5, 4, position, world, "\uD83E\uDDD0", OrganismType.HUMAN);
+                return new Human(5, 100, position, world, "\uD83E\uDDD0", OrganismType.HUMAN);
             case WOLF:
                 return new Animal(9,5, position, world, "\uD83D\uDC3A", OrganismType.WOLF);
             case SHEEP:
