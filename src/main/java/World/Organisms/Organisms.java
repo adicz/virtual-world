@@ -13,6 +13,7 @@ public abstract class Organisms implements Comparable<Organisms> {
     private String symbol;
     private OrganismType organismType;
     protected Integer lifeTime;
+    private boolean canMove;
 
     public Organisms(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         this.strength = strength;
@@ -22,6 +23,7 @@ public abstract class Organisms implements Comparable<Organisms> {
         this.symbol = symbol;
         this.organismType = organismType;
         this.lifeTime = 1;
+        this.canMove = true;
     }
 
     public void action(){}
@@ -54,6 +56,14 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     public void gainStrength(int value){
         strength += value;
+    }
+
+    public boolean isCanMove() {
+        return canMove;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 
     @Override

@@ -109,7 +109,7 @@ public class Animal extends Organisms {
                 case WOLFBERRIES:
                     changePosition(newPosition);
                     world.setOrganismOnField(newPosition, null);
-                    world.getTurnPriority().remove(this);
+                    this.setCanMove(false);
                     world.addLog(getOrganismType() + " ate " + organismTypeOnNewPosition + " and died");
                     break;
 
@@ -136,10 +136,8 @@ public class Animal extends Organisms {
 
                 case SHEEP:
                 case WOLF:
-                    fight(organismsOnNewPosition, newPosition);
-                    break;
                 case FOX:
-                    //todo
+                    fight(organismsOnNewPosition, newPosition);
                     break;
             }
         }
@@ -151,14 +149,14 @@ public class Animal extends Organisms {
             world.addLog(this.getOrganismType() + " defeat fight with " + enemy.getOrganismType());
         } else if (this.strength > enemy.strength) {
             changePosition(newPosition);
-            world.getTurnPriority().remove(enemy);
+            enemy.setCanMove(false);
             world.addLog(this.getOrganismType() + " won fight with " + enemy.getOrganismType());
         } else if (this.lifeTime < enemy.lifeTime){
             world.setOrganismOnField(position, null);
             world.addLog(this.getOrganismType() + " defeat fight with " + enemy.getOrganismType() + " because he was older");
         } else if (this.lifeTime > enemy.lifeTime){
             changePosition(newPosition);
-            world.getTurnPriority().remove(enemy);
+            enemy.setCanMove(false);
             world.addLog(this.getOrganismType() + "won fight with " + enemy.getOrganismType() + " because he was younger");
         } else {
             world.addLog("Nothing happened because both " + this.getOrganismType() + " " + enemy.getOrganismType() + " have same attack and life time");
@@ -222,6 +220,5 @@ public class Animal extends Organisms {
         } while (world.getOrganismOnField(newPosition) != null);
 
         return newPosition;
-
     }
 }

@@ -37,7 +37,7 @@ public class World {
         return fields;
     }
 
-    public void addLog(String log){
+    public void addLog(String log) {
         worldLogs.addLog(log);
     }
 
@@ -73,7 +73,7 @@ public class World {
                     randomPositionX = random.nextInt(dimensionN);
                     randomPositionY = random.nextInt(dimensionM);
 
-                    if (fields[randomPositionX][randomPositionY] == null){
+                    if (fields[randomPositionX][randomPositionY] == null) {
                         fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), new Position(randomPositionX, randomPositionY), this);
                         flag = false;
                     } else {
@@ -100,15 +100,15 @@ public class World {
         List<NumberOfOrganisms> numberOfOrganisms = new ArrayList<>();
 
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.HUMAN, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 3));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 5));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 0));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.FOX, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 0));
         numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GRASS, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 0));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GRASS, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 1));
+        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 1));
 
         return numberOfOrganisms;
     }
@@ -126,8 +126,10 @@ public class World {
 
         Collections.sort(turnPriority);
         try {
-            turnPriority.forEach(Organisms::action);
-        } catch (ConcurrentModificationException e){
+            turnPriority.stream()
+                    .filter(Organisms::isCanMove)
+                    .forEach(Organisms::action);
+        } catch (ConcurrentModificationException e) {
             System.out.println("Usunięto element z listy która właśnie była wykonywana");
         }
 
@@ -136,19 +138,30 @@ public class World {
 
     public void printWorld() {
         String spacer = "\t";
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields[i].length; j++) {
+        System.out.print("+");
+        for (int i = 0; i < fields.length * 4 + 3; i++) {
+            System.out.print("-");
+        }
+        System.out.println("+");
 
+        for (int i = 0; i < fields.length; i++) {
+            System.out.print("|\t");
+            for (int j = 0; j < fields[i].length; j++) {
                 if (fields[i][j] != null) {
                     fields[i][j].print();
                 } else {
                     System.out.print(" ");
                 }
                 System.out.print(spacer);
-
             }
-            System.out.println();
+            System.out.println("|");
         }
+
+        System.out.print("+");
+        for (int i = 0; i < fields.length * 4 + 3; i++) {
+            System.out.print("-");
+        }
+        System.out.println("+");
     }
 
 }
