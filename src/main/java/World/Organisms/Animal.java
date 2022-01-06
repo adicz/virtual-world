@@ -6,11 +6,8 @@ import java.util.Random;
 
 public class Animal extends Organisms {
 
-    private Position previousPosition;
-
     public Animal(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         super(strength, initiative, position, world, symbol, organismType);
-        previousPosition = position;
     }
 
     @Override
@@ -21,7 +18,7 @@ public class Animal extends Organisms {
                 break;
 
             case TURTLE:
-                moveWith25PercentChance();
+                moveWithChance(25);
                 break;
 
             case ANTELOPE:
@@ -29,34 +26,14 @@ public class Animal extends Organisms {
                 break;
 
             default:
-                move();
+                move(1);
                 break;
-        }
-    }
-
-    private void move() {
-        Position newPosition = calculateNewPosition(1, 1);
-        if (world.getOrganismOnField(newPosition) == null) {
-            changePosition(newPosition);
-        } else {
-            collision(newPosition);
         }
     }
 
     private void move(int moveRange) {
         Position newPosition = calculateNewPosition(moveRange, moveRange);
-        if (world.getOrganismOnField(newPosition) == null) {
-            changePosition(newPosition);
-        } else {
-            collision(newPosition);
-        }
-    }
-
-    private void moveWith25PercentChance() {
-        Random random = new Random();
-        int chanceToMove = random.nextInt(101);
-        if (chanceToMove >= 75) {
-            Position newPosition = calculateNewPosition(1, 1);
+        if (position.X != newPosition.X || position.Y != newPosition.Y) {
             if (world.getOrganismOnField(newPosition) == null) {
                 changePosition(newPosition);
             } else {
@@ -65,22 +42,31 @@ public class Animal extends Organisms {
         }
     }
 
+    private void moveWithChance(int percentChance) {
+        Random random = new Random();
+        int chanceToMove = random.nextInt(101);
+        if (chanceToMove >= percentChance) {
+            move(1);
+        }
+    }
+
     private void moveIfOpponentIsWeaker() {
         Position newPosition = calculateNewPosition(1, 1);
         if (world.getOrganismOnField(newPosition) == null) {
             changePosition(newPosition);
         } else {
-            if (world.getOrganismOnField(newPosition).strength <= this.strength) {
-                collision(newPosition);
-            } else {
-                changePosition(newPosition);
+            if (position.X != newPosition.X || position.Y != newPosition.Y) {
+                if (world.getOrganismOnField(newPosition).strength <= this.strength) {
+                    collision(newPosition);
+                } else {
+                    changePosition(newPosition);
+                }
             }
         }
     }
 
-    public void changePosition(Position newPosition){
+    public void changePosition(Position newPosition) {
         world.setOrganismOnField(position, null);
-        previousPosition = position;
         position = newPosition;
         world.setOrganismOnField(newPosition, this);
     }
@@ -91,46 +77,58 @@ public class Animal extends Organisms {
         OrganismType organismTypeOnNewPosition = organismsOnNewPosition.getOrganismType();
 
         if (organismTypeOnNewPosition == getOrganismType()) {
-            //todo bornNewAnimal();
+            bornNewAnimal(organismsOnNewPosition);
         } else {
             switch (organismTypeOnNewPosition) {
                 case GRASS:
                 case DANDELION:
                     changePosition(newPosition);
-                    world.addLog(getOrganismType() + " ate " + organismTypeOnNewPosition);
+                    world.addLog(String.format("%s %s ate %s %s",
+                            organismType, position.toString(),
+                            organismTypeOnNewPosition, organismsOnNewPosition.position.toString()));
                     break;
 
                 case GUARANA:
                     changePosition(newPosition);
                     this.gainStrength(3);
-                    world.addLog(getOrganismType() + " ate " + organismTypeOnNewPosition + " and gain 3 strength");
+                    world.addLog(String.format("%s %s ate %s %s and gain +\uD83D\uDCAA3 strength",
+                            organismType, position.toString(),
+                            organismTypeOnNewPosition, organismsOnNewPosition.position.toString()));
                     break;
 
                 case WOLFBERRIES:
                     changePosition(newPosition);
                     world.setOrganismOnField(newPosition, null);
                     this.setCanMove(false);
-                    world.addLog(getOrganismType() + " ate " + organismTypeOnNewPosition + " and died");
+                    world.addLog(String.format("%s %s ate %s %s and died",
+                            organismType, position.toString(),
+                            organismTypeOnNewPosition, organismsOnNewPosition.position.toString()));
                     break;
 
                 case TURTLE:
-                    if (this.strength < 5){
-                        changePosition(previousPosition);
-                        world.addLog(getOrganismType() + " can't kill " + organismTypeOnNewPosition + " he back to his previous position");
+                    if (this.strength < 5) {
+                        world.addLog(String.format("%s %s can't kill %s %s he back to %s",
+                                organismType, position.toString(),
+                                organismTypeOnNewPosition, organismsOnNewPosition.position.toString(),
+                                position.toString()));
                     } else {
                         fight(organismsOnNewPosition, newPosition);
                     }
                     break;
+
                 case ANTELOPE:
                     Random random = new Random();
                     int chanceToEscape = random.nextInt(101);
-                    if (chanceToEscape <= 50){
+                    if (chanceToEscape <= 50) {
                         fight(organismsOnNewPosition, newPosition);
                     } else {
                         Position newPositionForEnemy = calculateNewUnoccupiedPosition(organismsOnNewPosition);
                         world.setOrganismOnField(newPositionForEnemy, organismsOnNewPosition);
                         changePosition(newPosition);
-                        world.addLog(this.getOrganismType() + " attacks " + organismTypeOnNewPosition + " but she runs out ");
+                        world.addLog(String.format("%s %s attacks %s %s but she runs out to %s",
+                                organismType, position.toString(),
+                                organismTypeOnNewPosition, organismsOnNewPosition.position.toString(),
+                                newPositionForEnemy.toString()));
                     }
                     break;
 
@@ -143,23 +141,53 @@ public class Animal extends Organisms {
         }
     }
 
+    private void bornNewAnimal(Organisms partnerOrganism) {
+        if (isUnoccupiedPositionAround()) {
+            Position newPosition = calculateNewUnoccupiedPosition(this);
+            Organisms newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
+            world.setOrganismOnField(newPosition, newOrganism);
+            world.addLog(String.format("%s %s with %s %s born a new %s %s",
+                    organismType, position.toString(),
+                    partnerOrganism.organismType, partnerOrganism.position.toString(),
+                    organismType, newPosition.toString()));
+        }
+    }
+
+    private boolean isUnoccupiedPositionAround() {
+        for (int i = position.X - 1; i <= position.X + 1; i++) {
+            for (int j = position.Y - 1; j <= position.Y + 1; j++) {
+                try {
+                    if (world.getOrganismOnField(new Position(i, j)) == null) {
+                        return true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+
+                }
+            }
+        }
+        world.addLog(String.format("%s %s  wanted to born but there was no place",
+                organismType, position.toString()));
+        return false;
+    }
+
     private void fight(Organisms enemy, Position newPosition) {
-        if (this.strength < enemy.strength) {
+        if (strength < enemy.strength) {
             world.setOrganismOnField(position, null);
-            world.addLog(this.getOrganismType() + " defeat fight with " + enemy.getOrganismType());
-        } else if (this.strength > enemy.strength) {
+            world.addLog(String.format("%s \uD83D\uDCAA%d %s attack %s \uD83D\uDCAA%d %s and defeat",
+                    getOrganismType(), strength, position.toString(),
+                    enemy.getOrganismType(), enemy.strength, enemy.position.toString()));
+        } else if (strength > enemy.strength) {
             changePosition(newPosition);
             enemy.setCanMove(false);
-            world.addLog(this.getOrganismType() + " won fight with " + enemy.getOrganismType());
-        } else if (this.lifeTime < enemy.lifeTime){
-            world.setOrganismOnField(position, null);
-            world.addLog(this.getOrganismType() + " defeat fight with " + enemy.getOrganismType() + " because he was older");
-        } else if (this.lifeTime > enemy.lifeTime){
-            changePosition(newPosition);
-            enemy.setCanMove(false);
-            world.addLog(this.getOrganismType() + "won fight with " + enemy.getOrganismType() + " because he was younger");
+            world.addLog(String.format("%s \uD83D\uDCAA%d %s attack %s \uD83D\uDCAA%d %s and win",
+                    getOrganismType(), strength, position.toString(),
+                    enemy.getOrganismType(), enemy.strength, enemy.position.toString()));
         } else {
-            world.addLog("Nothing happened because both " + this.getOrganismType() + " " + enemy.getOrganismType() + " have same attack and life time");
+            changePosition(newPosition);
+            enemy.setCanMove(false);
+            world.addLog(String.format("%s \uD83D\uDCAA%d %s attack %s \uD83D\uDCAA%d %s, fight was equals but attacker won",
+                    getOrganismType(), strength, position.toString(),
+                    enemy.getOrganismType(), enemy.strength, enemy.position.toString()));
         }
     }
 
@@ -167,7 +195,6 @@ public class Animal extends Organisms {
         Random random = new Random();
         int moveX = 0;
         int moveY = 0;
-
         if (position.X < moveRangeX) {
             moveX = random.nextInt(1 + moveRangeX);
         } else if (position.X >= world.getFields().length - moveRangeX) {

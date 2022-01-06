@@ -14,16 +14,16 @@ public class Plant extends Organisms {
     public void action() {
         switch (this.getOrganismType()) {
             case DANDELION:
-                sow(10);
-                sow(10);
-                sow(10);
+                for (int i = 0; i < 3; i++) {
+                    sow(4);
+                }
                 break;
 
             case WOLFBERRIES:
-                sow(5);
+                sow(2);
 
             default:
-                sow(10);
+                sow(5);
                 break;
         }
     }
@@ -35,7 +35,9 @@ public class Plant extends Organisms {
             Position newPosition = calculateNewUnoccupiedPosition(this);
             Organisms newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
             world.setOrganismOnField(newPosition, newOrganism);
-            world.addLog(getOrganismType() + " sowed a new one " + getOrganismType());
+            world.addLog(String.format("%s %s sowed a new one %s %s",
+                    organismType, position.toString(),
+                    organismType, newPosition.toString()));
         }
     }
 
@@ -83,7 +85,8 @@ public class Plant extends Organisms {
                 }
             }
         }
-        world.addLog(getOrganismType() + " wanted to sow but there was no place");
+        world.addLog(String.format("%s %s wanted to sow but there was no place",
+                organismType, position.toString()));
         return false;
     }
 }

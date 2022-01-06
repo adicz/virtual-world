@@ -9,8 +9,8 @@ import java.util.*;
 
 public class World {
 
-    private Integer dimensionN;
-    private Integer dimensionM;
+    private final Integer dimensionN;
+    private final Integer dimensionM;
     private Organisms[][] fields;
     private Log worldLogs = new Log();
     private List<Organisms> turnPriority = new ArrayList<>();
@@ -19,10 +19,6 @@ public class World {
         this.dimensionN = dimensionN;
         this.dimensionM = dimensionM;
         this.fields = new Organisms[dimensionN][dimensionM];
-    }
-
-    public List<Organisms> getTurnPriority() {
-        return turnPriority;
     }
 
     public Organisms getOrganismOnField(Position position) {
@@ -55,62 +51,33 @@ public class World {
     }
 
     private void createWorld() {
-        //placeGrassEverywhere();
-        placeOrganisms();
-    }
-
-    private void placeOrganisms() {
         Random random = new Random();
-        List<NumberOfOrganisms> numberOfOrganisms = createNumberOfOrganisms();
+        Map<OrganismType, Integer> numberOfOrganisms = NumberOfOrganisms.getNumberOfOrganism();
         int randomPositionX;
         int randomPositionY;
         boolean flag = true;
 
-        for (NumberOfOrganisms organism : numberOfOrganisms) {
-            for (int i = 0; i < organism.getNumberOfOrganism(); i++) {
+        for (Map.Entry<OrganismType, Integer> organism : numberOfOrganisms.entrySet()) {
+            for (int i = 0; i < organism.getValue(); i++) {
                 do {
                     flag = true;
                     randomPositionX = random.nextInt(dimensionN);
                     randomPositionY = random.nextInt(dimensionM);
 
                     if (fields[randomPositionX][randomPositionY] == null) {
-                        fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), new Position(randomPositionX, randomPositionY), this);
+                        fields[randomPositionX][randomPositionY] = OrganismFactory
+                                .create(organism.getKey(), new Position(randomPositionX, randomPositionY), this);
                         flag = false;
                     } else {
                         if (fields[randomPositionX][randomPositionY].getOrganismType() == null) {
-                            fields[randomPositionX][randomPositionY] = OrganismFactory.create(organism.getOrganismType(), new Position(randomPositionX, randomPositionY), this);
+                            fields[randomPositionX][randomPositionY] = OrganismFactory
+                                    .create(organism.getKey(), new Position(randomPositionX, randomPositionY), this);
                             flag = false;
                         }
                     }
-
                 } while (flag);
             }
         }
-    }
-
-    private void placeGrassEverywhere() {
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields[i].length; j++) {
-                fields[i][j] = OrganismFactory.create(OrganismType.GRASS, new Position(i, j), this);
-            }
-        }
-    }
-
-    private List<NumberOfOrganisms> createNumberOfOrganisms() {
-        List<NumberOfOrganisms> numberOfOrganisms = new ArrayList<>();
-
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.HUMAN, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLF, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.SHEEP, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.FOX, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.TURTLE, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.ANTELOPE, 0));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GRASS, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.DANDELION, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.GUARANA, 1));
-        numberOfOrganisms.add(new NumberOfOrganisms(OrganismType.WOLFBERRIES, 1));
-
-        return numberOfOrganisms;
     }
 
     private void takeATurn() {
@@ -125,27 +92,22 @@ public class World {
         }
 
         Collections.sort(turnPriority);
-        try {
-            turnPriority.stream()
-                    .filter(Organisms::isCanMove)
-                    .forEach(Organisms::action);
-        } catch (ConcurrentModificationException e) {
-            System.out.println("Usunięto element z listy która właśnie była wykonywana");
-        }
-
+        turnPriority.stream()
+                .filter(Organisms::isCanMove)
+                .forEach(Organisms::action);
         turnPriority.forEach(Organisms::lifeTimeIncrement);
     }
 
     public void printWorld() {
         String spacer = "\t";
-        System.out.print("+");
-        for (int i = 0; i < fields.length * 4 + 3; i++) {
-            System.out.print("-");
+        System.out.print(" +");
+        for (int i = 0; i < fields.length; i++) {
+            System.out.print("--" + i + "-");
         }
-        System.out.println("+");
+        System.out.println("--+");
 
         for (int i = 0; i < fields.length; i++) {
-            System.out.print("|\t");
+            System.out.print(i + "|\t");
             for (int j = 0; j < fields[i].length; j++) {
                 if (fields[i][j] != null) {
                     fields[i][j].print();
@@ -157,8 +119,8 @@ public class World {
             System.out.println("|");
         }
 
-        System.out.print("+");
-        for (int i = 0; i < fields.length * 4 + 3; i++) {
+        System.out.print(" +");
+        for (int i = 0; i < fields.length * 4 + 2; i++) {
             System.out.print("-");
         }
         System.out.println("+");

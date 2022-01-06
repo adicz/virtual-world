@@ -1,4 +1,7 @@
 1. Czy wzorzec projektowy factory jest dobrze zaimplementowany?
-    Wzorowałem się opracowaniem z SDA w którym opisane było stworzenie interfejsu xyzFactory a następnie zaciągnięcie go do poszczególnych klass.
-    Innym rozwiązaniem jakie spotkałem to stworzenie po prsotu OrganismFactory, i w metodzie .create(OrganismType.HUMAN)
-    podanie enuma który podaje typ obiektu jaki chcemy stworzyć (poprzez switcha).
+    Spotkałem się z paroma implementacjami:
+        - opisana na SDA sugeruje stworzenie interfejsu OrganismFactory a następnie jego implementację w klasach
+        FoxFactory, WolfFactory, GrassFactory itd.
+
+        - drugim sposobem jest stworzenie enuma z typem każdego organizmu i tworzenie go za pomocą klasy OrganismFactory
+        za pomocą metody .create(organismType)

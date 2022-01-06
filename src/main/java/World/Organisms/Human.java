@@ -2,7 +2,6 @@ package World.Organisms;
 
 import World.World;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Human extends Animal {
@@ -43,7 +42,7 @@ public class Human extends Animal {
         do {
             System.out.print("Enter where you want to move (w:↑ a:← d:→ s:↓): ");
             nextMove = scanner.nextLine();
-            if (isCorrectMove(nextMove)){
+            if (isCorrectMove(nextMove)) {
                 System.out.println("Wrong index");
             }
         } while (isCorrectMove(nextMove));
