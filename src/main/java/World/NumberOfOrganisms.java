@@ -14,7 +14,7 @@ public class NumberOfOrganisms {
         numberOfOrganism.put(OrganismType.WOLF, 2);
         numberOfOrganism.put(OrganismType.SHEEP, 2);
         numberOfOrganism.put(OrganismType.FOX, 2);
-        numberOfOrganism.put(OrganismType.TURTLE, 10);
+        numberOfOrganism.put(OrganismType.TURTLE, 2);
         numberOfOrganism.put(OrganismType.ANTELOPE, 2);
         numberOfOrganism.put(OrganismType.GRASS, 5);
         numberOfOrganism.put(OrganismType.DANDELION, 2);

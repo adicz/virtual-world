@@ -1,7 +1,0 @@
-1. Czy wzorzec projektowy factory jest dobrze zaimplementowany?
-    Spotkałem się z paroma implementacjami:
-        - opisana na SDA sugeruje stworzenie interfejsu OrganismFactory a następnie jego implementację w klasach
-        FoxFactory, WolfFactory, GrassFactory itd.
-
-        - drugim sposobem jest stworzenie enuma z typem każdego organizmu i tworzenie go za pomocą klasy OrganismFactory
-        za pomocą metody .create(organismType)
