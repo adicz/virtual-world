@@ -1,6 +1,7 @@
-package World.Organisms;
+package organisms.factory;
 
-import World.World;
+import organisms.model.*;
+import world.World;
 
 public class OrganismFactory {
 

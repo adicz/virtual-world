@@ -1,4 +1,4 @@
-package World.Organisms;
+package organisms.model;
 
 public enum OrganismType {
 

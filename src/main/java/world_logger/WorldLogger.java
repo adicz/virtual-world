@@ -1,9 +1,9 @@
-package World;
+package world_logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Log {
+public class WorldLogger {
 
     private List<String> logList = new ArrayList<>();
     private static int logIndex = 1;

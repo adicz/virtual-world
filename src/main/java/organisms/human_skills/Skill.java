@@ -1,4 +1,4 @@
-package World.Organisms.HumanSkills;
+package organisms.human_skills;
 
 public interface Skill {
 

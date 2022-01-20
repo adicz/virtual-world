@@ -1,6 +1,6 @@
-package World;
+package world;
 
-import World.Organisms.OrganismType;
+import organisms.model.OrganismType;
 
 import java.util.Map;
 import java.util.TreeMap;

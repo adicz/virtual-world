@@ -1,4 +1,4 @@
-package World.Organisms.HumanSkills;
+package organisms.human_skills;
 
 public class Immortal implements Skill {
     @Override

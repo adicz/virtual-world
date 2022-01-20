@@ -1,6 +1,6 @@
-package World.Organisms;
+package organisms.model;
 
-import World.World;
+import world.World;
 
 public abstract class Organisms implements Comparable<Organisms> {
 

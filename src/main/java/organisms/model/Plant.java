@@ -1,6 +1,7 @@
-package World.Organisms;
+package organisms.model;
 
-import World.World;
+import organisms.factory.OrganismFactory;
+import world.World;
 
 import java.util.Random;
 
@@ -49,23 +50,23 @@ public class Plant extends Organisms {
         int moveY = 0;
 
         do {
-            if (organismPosition.X < 1) {
+            if (organismPosition.x < 1) {
                 moveX = random.nextInt(2);
-            } else if (organismPosition.X >= world.getFields().length - 1) {
+            } else if (organismPosition.x >= world.getFields().length - 1) {
                 moveX = random.nextInt(2) - 1;
             } else {
                 moveX = random.nextInt(3) - 1;
             }
 
-            if (organismPosition.Y < 1) {
+            if (organismPosition.y < 1) {
                 moveY = random.nextInt(2);
-            } else if (organismPosition.Y >= world.getFields()[0].length - 1) {
+            } else if (organismPosition.y >= world.getFields()[0].length - 1) {
                 moveY = random.nextInt(2) - 1;
             } else {
                 moveY = random.nextInt(3) - 1;
             }
-            int newPositionX = organismPosition.X + moveX;
-            int newPositionY = organismPosition.Y + moveY;
+            int newPositionX = organismPosition.x + moveX;
+            int newPositionY = organismPosition.y + moveY;
 
             newPosition = new Position(newPositionX, newPositionY);
         } while (world.getOrganismOnField(newPosition) != null);
@@ -74,8 +75,8 @@ public class Plant extends Organisms {
     }
 
     private boolean isUnoccupiedPositionAround() {
-        for (int i = position.X - 1; i <= position.X + 1; i++) {
-            for (int j = position.Y - 1; j <= position.Y + 1; j++) {
+        for (int i = position.x - 1; i <= position.x + 1; i++) {
+            for (int j = position.y - 1; j <= position.y + 1; j++) {
                 try {
                     if (world.getOrganismOnField(new Position(i, j)) == null) {
                         return true;

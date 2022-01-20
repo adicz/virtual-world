@@ -1,7 +1,7 @@
-package World.Organisms;
+package organisms.model;
 
-import World.Organisms.HumanSkills.*;
-import World.World;
+import organisms.human_skills.*;
+import world.World;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,10 +61,10 @@ public class Human extends Animal {
     }
 
     public void moveUp() {
-        if (position.X != 0) {
-            world.getFields()[position.X][position.Y] = null;
-            position.X -= 1;
-            world.getFields()[position.X][position.Y] = this;
+        if (position.x != 0) {
+            world.getFields()[position.x][position.y] = null;
+            position.x -= 1;
+            world.getFields()[position.x][position.y] = this;
             world.getWorldLogs().addLog("You moved up");
         } else {
             System.out.print("You can't move there, it's the end of the world\n\n");
@@ -72,10 +72,10 @@ public class Human extends Animal {
     }
 
     public void moveDown() {
-        if (position.X != world.getFields().length - 1) {
-            world.getFields()[position.X][position.Y] = null;
-            position.X += 1;
-            world.getFields()[position.X][position.Y] = this;
+        if (position.x != world.getFields().length - 1) {
+            world.getFields()[position.x][position.y] = null;
+            position.x += 1;
+            world.getFields()[position.x][position.y] = this;
             world.getWorldLogs().addLog("You moved down");
         } else {
             System.out.print("You can't move there, it's the end of the world\n\n");
@@ -83,10 +83,10 @@ public class Human extends Animal {
     }
 
     public void moveLeft() {
-        if (position.Y != 0) {
-            world.getFields()[position.X][position.Y] = null;
-            position.Y -= 1;
-            world.getFields()[position.X][position.Y] = this;
+        if (position.y != 0) {
+            world.getFields()[position.x][position.y] = null;
+            position.y -= 1;
+            world.getFields()[position.x][position.y] = this;
             world.getWorldLogs().addLog("You moved left");
         } else {
             System.out.print("You can't move there, it's the end of the world\n\n");
@@ -94,10 +94,10 @@ public class Human extends Animal {
     }
 
     public void moveRight() {
-        if (position.Y != world.getFields()[0].length - 1) {
-            world.getFields()[position.X][position.Y] = null;
-            position.Y += 1;
-            world.getFields()[position.X][position.Y] = this;
+        if (position.y != world.getFields()[0].length - 1) {
+            world.getFields()[position.x][position.y] = null;
+            position.y += 1;
+            world.getFields()[position.x][position.y] = this;
             world.getWorldLogs().addLog("You moved right");
         } else {
             System.out.print("You can't move there, it's the end of the world\n\n");

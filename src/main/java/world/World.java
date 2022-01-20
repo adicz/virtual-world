@@ -1,9 +1,10 @@
-package World;
+package world;
 
-import World.Organisms.OrganismFactory;
-import World.Organisms.OrganismType;
-import World.Organisms.Organisms;
-import World.Organisms.Position;
+import world_logger.WorldLogger;
+import organisms.factory.OrganismFactory;
+import organisms.model.OrganismType;
+import organisms.model.Organisms;
+import organisms.model.Position;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ public class World {
     private final Integer dimensionN;
     private final Integer dimensionM;
     private Organisms[][] fields;
-    private Log worldLogs = new Log();
+    private WorldLogger worldLogs = new WorldLogger();
     private List<Organisms> turnPriority = new ArrayList<>();
 
     public World(Integer dimensionN, Integer dimensionM) {
@@ -37,7 +38,7 @@ public class World {
         worldLogs.addLog(log);
     }
 
-    public Log getWorldLogs() {
+    public WorldLogger getWorldLogs() {
         return worldLogs;
     }
 

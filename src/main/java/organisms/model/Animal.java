@@ -1,6 +1,7 @@
-package World.Organisms;
+package organisms.model;
 
-import World.World;
+import organisms.factory.OrganismFactory;
+import world.World;
 
 import java.util.Random;
 
@@ -33,7 +34,7 @@ public class Animal extends Organisms {
 
     private void move(int moveRange) {
         Position newPosition = calculateNewPosition(moveRange, moveRange);
-        if (position.X != newPosition.X || position.Y != newPosition.Y) {
+        if (position.x != newPosition.x || position.y != newPosition.y) {
             if (world.getOrganismOnField(newPosition) == null) {
                 changePosition(newPosition);
             } else {
@@ -55,7 +56,7 @@ public class Animal extends Organisms {
         if (world.getOrganismOnField(newPosition) == null) {
             changePosition(newPosition);
         } else {
-            if (position.X != newPosition.X || position.Y != newPosition.Y) {
+            if (position.x != newPosition.x || position.y != newPosition.y) {
                 if (world.getOrganismOnField(newPosition).strength <= this.strength) {
                     collision(newPosition);
                 } else {
@@ -154,8 +155,8 @@ public class Animal extends Organisms {
     }
 
     private boolean isUnoccupiedPositionAround() {
-        for (int i = position.X - 1; i <= position.X + 1; i++) {
-            for (int j = position.Y - 1; j <= position.Y + 1; j++) {
+        for (int i = position.x - 1; i <= position.x + 1; i++) {
+            for (int j = position.y - 1; j <= position.y + 1; j++) {
                 try {
                     if (world.getOrganismOnField(new Position(i, j)) == null) {
                         return true;
@@ -195,24 +196,24 @@ public class Animal extends Organisms {
         Random random = new Random();
         int moveX = 0;
         int moveY = 0;
-        if (position.X < moveRangeX) {
+        if (position.x < moveRangeX) {
             moveX = random.nextInt(1 + moveRangeX);
-        } else if (position.X >= world.getFields().length - moveRangeX) {
+        } else if (position.x >= world.getFields().length - moveRangeX) {
             moveX = random.nextInt(1 + moveRangeX) - moveRangeX;
         } else {
             moveX = random.nextInt(2 + moveRangeX) - moveRangeX;
         }
 
-        if (position.Y < moveRangeY) {
+        if (position.y < moveRangeY) {
             moveY = random.nextInt(1 + moveRangeY);
-        } else if (position.Y >= world.getFields()[0].length - moveRangeY) {
+        } else if (position.y >= world.getFields()[0].length - moveRangeY) {
             moveY = random.nextInt(1 + moveRangeY) - moveRangeY;
         } else {
             moveY = random.nextInt(2 + moveRangeY) - moveRangeY;
         }
 
-        int newPositionX = position.X + moveX;
-        int newPositionY = position.Y + moveY;
+        int newPositionX = position.x + moveX;
+        int newPositionY = position.y + moveY;
 
         return new Position(newPositionX, newPositionY);
     }
@@ -225,23 +226,23 @@ public class Animal extends Organisms {
         int moveY = 0;
 
         do {
-            if (organismPosition.X < 1) {
+            if (organismPosition.x < 1) {
                 moveX = random.nextInt(2);
-            } else if (organismPosition.X >= world.getFields().length - 1) {
+            } else if (organismPosition.x >= world.getFields().length - 1) {
                 moveX = random.nextInt(2) - 1;
             } else {
                 moveX = random.nextInt(3) - 1;
             }
 
-            if (organismPosition.Y < 1) {
+            if (organismPosition.y < 1) {
                 moveY = random.nextInt(2);
-            } else if (organismPosition.Y >= world.getFields()[0].length - 1) {
+            } else if (organismPosition.y >= world.getFields()[0].length - 1) {
                 moveY = random.nextInt(2) - 1;
             } else {
                 moveY = random.nextInt(3) - 1;
             }
-            int newPositionX = organismPosition.X + moveX;
-            int newPositionY = organismPosition.Y + moveY;
+            int newPositionX = organismPosition.x + moveX;
+            int newPositionY = organismPosition.y + moveY;
 
             newPosition = new Position(newPositionX, newPositionY);
         } while (world.getOrganismOnField(newPosition) != null);
