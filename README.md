@@ -3,7 +3,7 @@
 Virtual World is a project implemented as part of a Java course. The project consists of implementing a program as a virtual world simulator. The world has a two-dimensional structure of any user-set size. In the world there are simple life forms with different behaviors.
 
 _Below is an example of how the program works_
-![](https://raw.githubusercontent.com/adicz/virtual-world/main/example.gif)
+![](https://github.com/adicz/virtual-world/blob/main/example.gif)
 
 # Project assumptions
 
