@@ -5,7 +5,7 @@ import world.World;
 
 public class OrganismFactory {
 
-    public static Organisms create(OrganismType organismType, Position position, World world) {
+    public static Organism create(OrganismType organismType, Position position, World world) {
         switch (organismType) {
             case HUMAN:
                 return new Human(5, 100, position, world, "\uD83E\uDDD0", OrganismType.HUMAN);

@@ -5,7 +5,7 @@ import world.World;
 
 import java.util.Random;
 
-public class Plant extends Organisms {
+public class Plant extends Organism {
 
     public Plant(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         super(strength, initiative, position, world, symbol, organismType);
@@ -29,12 +29,17 @@ public class Plant extends Organisms {
         }
     }
 
+    @Override
+    public void collision(Position position) {
+
+    }
+
     private void sow(int percentChance) {
         Random random = new Random();
         int chanceToSowNewPlant = random.nextInt(101);
         if (chanceToSowNewPlant <= percentChance && isUnoccupiedPositionAround()) {
             Position newPosition = calculateNewUnoccupiedPosition(this);
-            Organisms newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
+            Organism newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
             world.setOrganismOnField(newPosition, newOrganism);
             world.addLog(String.format("%s %s sowed a new one %s %s",
                     organismType, position.toString(),
@@ -42,7 +47,7 @@ public class Plant extends Organisms {
         }
     }
 
-    private Position calculateNewUnoccupiedPosition(Organisms organism) {
+    private Position calculateNewUnoccupiedPosition(Organism organism) {
         Random random = new Random();
         Position organismPosition = organism.position;
         Position newPosition;

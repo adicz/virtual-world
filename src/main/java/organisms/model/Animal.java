@@ -5,7 +5,7 @@ import world.World;
 
 import java.util.Random;
 
-public class Animal extends Organisms {
+public class Animal extends Organism {
 
     public Animal(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         super(strength, initiative, position, world, symbol, organismType);
@@ -74,7 +74,7 @@ public class Animal extends Organisms {
 
     @Override
     public void collision(Position newPosition) {
-        Organisms organismsOnNewPosition = world.getOrganismOnField(newPosition);
+        Organism organismsOnNewPosition = world.getOrganismOnField(newPosition);
         OrganismType organismTypeOnNewPosition = organismsOnNewPosition.getOrganismType();
 
         if (organismTypeOnNewPosition == getOrganismType()) {
@@ -142,10 +142,10 @@ public class Animal extends Organisms {
         }
     }
 
-    private void bornNewAnimal(Organisms partnerOrganism) {
+    private void bornNewAnimal(Organism partnerOrganism) {
         if (isUnoccupiedPositionAround()) {
             Position newPosition = calculateNewUnoccupiedPosition(this);
-            Organisms newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
+            Organism newOrganism = OrganismFactory.create(this.getOrganismType(), newPosition, world);
             world.setOrganismOnField(newPosition, newOrganism);
             world.addLog(String.format("%s %s with %s %s born a new %s %s",
                     organismType, position.toString(),
@@ -171,7 +171,7 @@ public class Animal extends Organisms {
         return false;
     }
 
-    private void fight(Organisms enemy, Position newPosition) {
+    private void fight(Organism enemy, Position newPosition) {
         if (strength < enemy.strength) {
             world.setOrganismOnField(position, null);
             world.addLog(String.format("%s \uD83D\uDCAA%d %s attack %s \uD83D\uDCAA%d %s and defeat",
@@ -218,7 +218,7 @@ public class Animal extends Organisms {
         return new Position(newPositionX, newPositionY);
     }
 
-    private Position calculateNewUnoccupiedPosition(Organisms organism) {
+    private Position calculateNewUnoccupiedPosition(Organism organism) {
         Random random = new Random();
         Position organismPosition = organism.position;
         Position newPosition;

@@ -1,6 +1,6 @@
 package organisms.human_skills;
 
-public class Holocaust implements Skill {
+public class Burnout implements Skill {
     @Override
     public void use() {
 

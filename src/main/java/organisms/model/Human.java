@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Human extends Animal {
 
-    public List<Skill> skills = Arrays.asList(new AlzursShield(), new AntelopeSpeed(), new Holocaust(), new Immortal(), new MagicPotion());
+    public List<Skill> skills = Arrays.asList(new AlzursShield(), new AntelopeSpeed(), new Burnout(), new Immortal(), new MagicPotion());
 
     public Human(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         super(strength, initiative, position, world, symbol, organismType);
@@ -33,9 +33,9 @@ public class Human extends Animal {
                 moveDown();
                 break;
             case "e":
-                // todo obsługa umiejętności
+                // todo skill handling
             case "q":
-                // todo obsługo statystyk świata
+                // todo handling world statistics
         }
     }
 

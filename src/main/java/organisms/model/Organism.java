@@ -2,7 +2,7 @@ package organisms.model;
 
 import world.World;
 
-public abstract class Organisms implements Comparable<Organisms> {
+public abstract class Organism implements Comparable<Organism> {
 
     protected Integer strength;
     protected Integer initiative;
@@ -13,7 +13,7 @@ public abstract class Organisms implements Comparable<Organisms> {
     protected Integer lifeTime;
     private boolean canMove;
 
-    public Organisms(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
+    public Organism(Integer strength, Integer initiative, Position position, World world, String symbol, OrganismType organismType) {
         this.strength = strength;
         this.initiative = initiative;
         this.position = position;
@@ -24,11 +24,9 @@ public abstract class Organisms implements Comparable<Organisms> {
         this.canMove = true;
     }
 
-    public void action() {
-    }
+    public abstract void action();
 
-    public void collision(Position position) {
-    }
+    public abstract void collision(Position position);
 
     public void print() {
         System.out.print(symbol);
@@ -36,6 +34,14 @@ public abstract class Organisms implements Comparable<Organisms> {
 
     public OrganismType getOrganismType() {
         return organismType;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public void lifeTimeIncrement() {
@@ -55,7 +61,7 @@ public abstract class Organisms implements Comparable<Organisms> {
     }
 
     @Override
-    public int compareTo(Organisms o) {
+    public int compareTo(Organism o) {
         if (this.initiative == o.initiative) {
             return -this.lifeTime + o.lifeTime;
         } else {

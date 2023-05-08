@@ -3,7 +3,7 @@ package world;
 import world_logger.WorldLogger;
 import organisms.factory.OrganismFactory;
 import organisms.model.OrganismType;
-import organisms.model.Organisms;
+import organisms.model.Organism;
 import organisms.model.Position;
 
 import java.util.*;
@@ -12,25 +12,25 @@ public class World {
 
     private final Integer dimensionN;
     private final Integer dimensionM;
-    private Organisms[][] fields;
+    private Organism[][] fields;
     private WorldLogger worldLogs = new WorldLogger();
-    private List<Organisms> turnPriority = new ArrayList<>();
+    private List<Organism> turnPriority = new ArrayList<>();
 
     public World(Integer dimensionN, Integer dimensionM) {
         this.dimensionN = dimensionN;
         this.dimensionM = dimensionM;
-        this.fields = new Organisms[dimensionN][dimensionM];
+        this.fields = new Organism[dimensionN][dimensionM];
     }
 
-    public Organisms getOrganismOnField(Position position) {
-        return fields[position.getPositionX()][position.getPositionY()];
+    public Organism getOrganismOnField(Position position) {
+        return fields[position.getX()][position.getY()];
     }
 
-    public void setOrganismOnField(Position position, Organisms organism) {
-        fields[position.getPositionX()][position.getPositionY()] = organism;
+    public void setOrganismOnField(Position position, Organism organism) {
+        fields[position.getX()][position.getY()] = organism;
     }
 
-    public Organisms[][] getFields() {
+    public Organism[][] getFields() {
         return fields;
     }
 
@@ -94,9 +94,9 @@ public class World {
 
         Collections.sort(turnPriority);
         turnPriority.stream()
-                .filter(Organisms::isCanMove)
-                .forEach(Organisms::action);
-        turnPriority.forEach(Organisms::lifeTimeIncrement);
+                .filter(Organism::isCanMove)
+                .forEach(Organism::action);
+        turnPriority.forEach(Organism::lifeTimeIncrement);
     }
 
     public void printWorld() {
